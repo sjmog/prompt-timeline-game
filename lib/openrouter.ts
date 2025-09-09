@@ -29,6 +29,7 @@ export async function generateWithOpenRouter(
     });
 
     if (!response.ok) {
+      console.error('OpenRouter API error:', response);
       throw new Error(`OpenRouter API error: ${response.statusText}`);
     }
 

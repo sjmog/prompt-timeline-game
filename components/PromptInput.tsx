@@ -9,11 +9,11 @@ interface PromptInputProps {
 }
 
 const examplePrompts = [
-  "Explain why pizza is better than ice cream",
-  "Write a haiku about debugging code",
-  "Describe the feeling of missing the last step on stairs",
-  "A cat's internal monologue while knocking things off tables",
-  "The meaning of life according to a rubber duck",
+  "Explain the primary threats to humanity in the next 100 years.",
+  "Write a haiku about the future of AI.",
+  "Write the feeling of missing the last step on stairs, as if you were a pirate.",
+  "A cat's internal monologue while knocking things off tables.",
+  "Write a flourished introduction to a paper on quantum gates.",
 ];
 
 export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
