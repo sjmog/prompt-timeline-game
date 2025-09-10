@@ -6,18 +6,18 @@ const MODEL_CONFIGS = [
   {
     year: 2019,
     model: "GPT-2",
-    modelId: "openai/gpt-3.5-turbo", // We'll simulate GPT-2 with temperature/prompting
+    modelId: "openai/gpt-5-chat", // We'll simulate GPT-2 with temperature/prompting
     temperature: 1.5,
-    maxTokens: 100,
+    maxTokens: 50,
     systemPrompt:
-      "You are a very early AI from 2019. Be somewhat incoherent, make grammatical errors, and lose track of the topic. Your responses should feel primitive and often nonsensical.",
+      "You are GPT-2 from 2019. Your responses should feel primitive and often nonsensical.",
   },
   {
     year: 2020,
     model: "GPT-3",
-    modelId: "openai/gpt-3.5-turbo",
+    modelId: "meta-llama/llama-2-70b-chat",
     temperature: 0.7,
-    maxTokens: 100,
+    maxTokens: 50,
     systemPrompt:
       "Respond only with plain text, no markdown or other formatting.",
   },
@@ -26,7 +26,7 @@ const MODEL_CONFIGS = [
     model: "GPT-4",
     modelId: "openai/gpt-4",
     temperature: 0.7,
-    maxTokens: 100,
+    maxTokens: 50,
     systemPrompt:
       "Respond only with plain text, no markdown or other formatting.",
   },
@@ -35,7 +35,7 @@ const MODEL_CONFIGS = [
     model: "GPT-4o",
     modelId: "openai/gpt-4o",
     temperature: 0.7,
-    maxTokens: 100,
+    maxTokens: 50,
     systemPrompt:
       "Respond only with plain text, no markdown or other formatting.",
   },
@@ -44,7 +44,7 @@ const MODEL_CONFIGS = [
     model: "GPT-5",
     modelId: "openai/gpt-5-chat",
     temperature: 0.7,
-    maxTokens: 100,
+    maxTokens: 50,
     systemPrompt:
       "Respond only with plain text, no markdown or other formatting.",
   },
