@@ -49,12 +49,9 @@ function SortableItem({ id, output, index }: SortableItemProps) {
   };
 
   return (
-    <motion.div
+    <div
       ref={setNodeRef}
       style={style}
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.1 }}
       className={`relative ${isDragging ? 'z-50' : 'z-10'}`}
     >
       <div
@@ -83,7 +80,7 @@ function SortableItem({ id, output, index }: SortableItemProps) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -129,7 +126,6 @@ export default function TimelineGame({ prompt, outputs, onComplete }: TimelineGa
   );
 
   useEffect(() => {
-    // Shuffle outputs on mount with a more random algorithm
     const shuffled = [...outputs]
       .map(value => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
@@ -154,7 +150,6 @@ export default function TimelineGame({ prompt, outputs, onComplete }: TimelineGa
           `${item.year}-${item.model}` === over.id
         );
         
-        // Track drag count for engagement metrics
         setDragCount(prev => prev + 1);
         
         return arrayMove(items, oldIndex, newIndex);
@@ -170,19 +165,18 @@ export default function TimelineGame({ prompt, outputs, onComplete }: TimelineGa
     shuffledOutputs.forEach((output, index) => {
       const correctIndex = correctOrder.findIndex(o => o.year === output.year);
       if (correctIndex === index) {
-        score += 100; // Perfect placement
+        score += 100;
       } else if (Math.abs(correctIndex - index) === 1) {
-        score += 50; // One position off
+        score += 50;
         perfectBonus = false;
       } else {
-        score += Math.max(0, 25 - Math.abs(correctIndex - index) * 5); // Partial credit
+        score += Math.max(0, 25 - Math.abs(correctIndex - index) * 5);
         perfectBonus = false;
       }
     });
 
-    // Add bonuses
-    if (perfectBonus) score += 100; // Perfect arrangement bonus
-    if (dragCount <= outputs.length) score += 50; // Efficiency bonus
+    if (perfectBonus) score += 100;
+    if (dragCount <= outputs.length) score += 50;
     
     return score;
   };

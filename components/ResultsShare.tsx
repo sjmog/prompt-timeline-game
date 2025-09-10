@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useEffect } from 'react';
-import confetti from 'canvas-confetti';
-import type { GameResults } from '@/types';
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
+import type { GameResults } from "@/types";
 
 interface ResultsShareProps {
   results: GameResults;
   onPlayAgain: () => void;
 }
 
-export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps) {
+export default function ResultsShare({
+  results,
+  onPlayAgain,
+}: ResultsShareProps) {
   const correctCount = results.userOrder.filter(
     (year, index) => year === results.correctOrder[index]
   ).length;
@@ -21,28 +24,23 @@ export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.6 }
+        origin: { y: 0.6 },
       });
     }
   }, [accuracy]);
 
-  const shareText = `🤖 I just played Prompt Time Machine!\n\n` +
-    `Prompt: "${results.prompt.substring(0, 50)}..."\n` +
-    `Score: ${results.score} points\n` +
-    `Accuracy: ${accuracy.toFixed(0)}%\n\n` +
-    `Can you guess how AI evolved from 2019 to 2024?\n` +
-    `Try it: ${process.env.NEXT_PUBLIC_APP_URL}`;
+  const shareUrl =
+    process.env.NEXT_PUBLIC_TWEET_URL || process.env.NEXT_PUBLIC_APP_URL;
+  const shareText =
+    `AI is progressing scary fast.\n\n` +
+    `Try your own prompt and compare GPT-2 to GPT-5:\n\n` +
+    `(I got ${results.score} points)`;
 
   const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        title: 'Prompt Time Machine',
-        text: shareText,
-      });
-    } else {
-      navigator.clipboard.writeText(shareText);
-      alert('Copied to clipboard!');
-    }
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText
+    )}&url=${encodeURIComponent(shareUrl || "")}`;
+    window.open(tweetUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -63,12 +61,16 @@ export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps
           </div>
           <div className="bg-purple-900/50 rounded-lg p-4">
             <p className="text-purple-200 text-sm mb-1">Accuracy</p>
-            <p className="text-3xl font-bold text-white">{accuracy.toFixed(0)}%</p>
+            <p className="text-3xl font-bold text-white">
+              {accuracy.toFixed(0)}%
+            </p>
           </div>
         </div>
 
         <div className="mb-8">
-          <h3 className="text-xl font-bold text-white mb-4">The Actual Timeline:</h3>
+          <h3 className="text-xl font-bold text-white mb-4">
+            The Actual Timeline:
+          </h3>
           <div className="space-y-3">
             {results.outputs
               .sort((a, b) => a.year - b.year)
@@ -99,9 +101,9 @@ export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps
             💡 What This Means
           </h3>
           <p className="text-purple-100">
-            In just 5 years, AI went from barely coherent to human-level creative writing. 
-            This exponential growth is accelerating. The next 2 years will bring changes 
-            that seem impossible today.
+            In just 7 years, AI went from barely coherent to human-level
+            creative writing. This exponential growth is accelerating. The next
+            2 years will bring changes that seem impossible today.
           </p>
         </div>
 
@@ -109,8 +111,18 @@ export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps
           <button
             onClick={handleShare}
             className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all"
+            aria-label="Share results on X"
           >
-            Share Results 📤
+            <span className="flex items-center justify-center gap-2">
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="h-5 w-5 fill-current"
+              >
+                <path d="M18.244 2.25h3.308l-7.224 8.26 8.484 11.24H17.5l-5.566-7.28-6.37 7.28H2.252l7.72-8.82-8.2-10.958h7.5l5.026 6.67 6.946-6.392zm-1.167 19.5h1.834L7.01 4.5H5.05l12.027 17.25z" />
+              </svg>
+              <span>Share on X</span>
+            </span>
           </button>
           <button
             onClick={onPlayAgain}
@@ -118,16 +130,6 @@ export default function ResultsShare({ results, onPlayAgain }: ResultsShareProps
           >
             Play Again
           </button>
-        </div>
-
-        <div className="mt-6 p-4 bg-blue-900/50 rounded-lg text-center">
-          <p className="text-blue-200 mb-2">Ready to learn more?</p>
-          <a
-            href="#"
-            className="inline-block px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all"
-          >
-            Continue to Module 2: The Acceleration →
-          </a>
         </div>
       </div>
     </motion.div>
