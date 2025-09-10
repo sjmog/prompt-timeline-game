@@ -12,8 +12,7 @@ const examplePrompts = [
   "Explain the primary threats to humanity in the next 100 years.",
   "Write a haiku about the future of AI.",
   "Write the feeling of missing the last step on stairs, as if you were a pirate.",
-  "A cat's internal monologue while knocking things off tables.",
-  "Write a flourished introduction to a paper on quantum gates.",
+  "Here is a cat's internal monologue while knocking things off tables.",
 ];
 
 export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
@@ -62,10 +61,10 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
                   key={index}
                   type="button"
                   onClick={() => useExample(example)}
-                  className="px-3 py-1 text-xs bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors"
+                  className="cursor-pointer px-3 py-1 text-xs bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors truncate"
                   disabled={loading}
                 >
-                  {example.substring(0, 30)}...
+                  {example}
                 </button>
               ))}
             </div>
@@ -74,7 +73,7 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
           <button
             type="submit"
             disabled={loading || !prompt.trim()}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
+            className="mt-4 w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
           >
             {loading ? (
               <span className="flex items-center justify-center">
@@ -88,6 +87,10 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
               'Generate Time Machine Outputs →'
             )}
           </button>
+
+          <p className="text-xs text-purple-200 text-center opacity-60">
+            (This can take up to 10 seconds.)
+          </p>
         </form>
       </div>
     </motion.div>
