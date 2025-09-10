@@ -2,11 +2,15 @@ import { NextResponse } from "next/server";
 import { generateWithOpenRouter } from "@/lib/openrouter";
 import { generateWithHuggingFace } from "@/lib/huggingface";
 
+type ModelProvider = "huggingface" | "openrouter";
+type ModelType = "completion" | "chat";
+
 type ModelConfig = {
   year: number;
   model: string;
-  provider: string;
-  type: string;
+  url?: string;
+  provider: ModelProvider;
+  type: ModelType;
   modelId: string;
   systemPrompt: string;
   temperature?: number;
@@ -18,24 +22,13 @@ const DEFAULT_MAX_TOKENS = 70;
 
 // Model configurations for different years
 const MODEL_CONFIGS: ModelConfig[] = [
-  // {
-  //   year: 2017,
-  //   model: "GPT-1",
-  //   provider: "huggingface",
-  //   type: "completion",
-  //   modelId:
-  //     "openai-community/openai-gpt",
-  //   temperature: DEFAULT_TEMPERATURE,
-  //   maxTokens: DEFAULT_MAX_TOKENS,
-  //   systemPrompt: "",
-  // },
   {
     year: 2018,
     model: "GPT-2",
     provider: "huggingface",
     type: "completion",
-    modelId:
-      "https://f76lt51xliydk53k.us-east-1.aws.endpoints.huggingface.cloud",
+    modelId: "gpt-2",
+    url: "https://f76lt51xliydk53k.us-east-1.aws.endpoints.huggingface.cloud",
     temperature: DEFAULT_TEMPERATURE,
     maxTokens: DEFAULT_MAX_TOKENS,
     systemPrompt: "",
@@ -43,29 +36,17 @@ const MODEL_CONFIGS: ModelConfig[] = [
   {
     year: 2020,
     model: "GPT-3",
-    modelId: "meta-llama/llama-2-70b-chat",
+    modelId: "unsloth/llama-2-13b",
     provider: "huggingface",
     type: "completion",
     temperature: DEFAULT_TEMPERATURE,
     maxTokens: DEFAULT_MAX_TOKENS,
-    systemPrompt:
-      "",
+    systemPrompt: "Prompt:",
   },
-  // {
-  //   year: 2023,
-  //   model: "GPT-4",
-  //   modelId: "openai/gpt-4-0314",
-  //   provider: "openrouter",
-  //   type: "chat",
-  //   temperature: DEFAULT_TEMPERATURE,
-  //   maxTokens: DEFAULT_MAX_TOKENS,
-  //   systemPrompt:
-  //     "Respond only with plain text, no markdown or other formatting.",
-  // },
   {
     year: 2023,
     model: "GPT-4",
-    modelId: "openai/gpt-3.5-turbo",
+    modelId: "openai/gpt-4-0314",
     provider: "openrouter",
     type: "chat",
     temperature: DEFAULT_TEMPERATURE,
@@ -99,7 +80,7 @@ export async function POST(request: Request) {
 
     const outputs = await Promise.all(
       MODEL_CONFIGS.map(async (config) => {
-        let output: string | undefined = undefined;
+        let output: string = `[${config.model} response]`;
 
         if (config.provider === "huggingface") {
           output = await generateWithHuggingFace(
@@ -108,7 +89,8 @@ export async function POST(request: Request) {
             config.modelId,
             config.systemPrompt,
             config.temperature,
-            config.maxTokens
+            config.maxTokens,
+            config.url
           );
         } else if (config.provider === "openrouter") {
           output = await generateWithOpenRouter(
@@ -123,21 +105,43 @@ export async function POST(request: Request) {
 
         // remove the trailing sentence of the output, but keep all other sentences
 
-        const sentenceEnders = [".", "!", "?", "\n", "\r", "\t", "\""];
+        const sentenceEnders = [".", "!", "?"];
 
-        const sentences = output?.split(sentenceEnders.join("|"));
+        const sentences = output.split(sentenceEnders.join("|"));
         if (sentences) {
           if (sentences.length > 1) sentences.pop();
-          output = sentences.join(".") + ".";
+          output = sentences.join(".");
         } else {
-          output = output?.trim() + ".";
+          output = output.trim();
+        }
+
+        // ensure the end of the sentence makes sense!
+        switch (output[output.length - 1]) {
+          case ".":
+            break;
+          case "!":
+            break;
+          case "?":
+            break;
+          case '"':
+            break;
+          case ",":
+            output = `${output.slice(0, -1)}...`;
+          case ";":
+            output = `${output.slice(0, -1)}...`;
+          case ":":
+            output = `${output.slice(0, -1)}...`;
+          case "(":
+            output = `${output.slice(0, -1)}...`;
+          default:
+            output = `${output}...`;
         }
 
         return {
           year: config.year,
           model: config.model,
           modelId: config.modelId,
-          output: output || `[${config.model} response]`,
+          output: output,
         };
       })
     );

@@ -19,14 +19,15 @@ function getClient(): InferenceClient {
 }
 
 async function generateWithInput(
+  model: string,
   prompt: string,
   systemPrompt: string,
   temperature: number | undefined,
-  maxTokens: number | undefined
+  maxTokens: number | undefined,
+  url?: string
 ): Promise<GeneratedTextResponse> {
-  const response = await fetch(
-    "https://f76lt51xliydk53k.us-east-1.aws.endpoints.huggingface.cloud",
-    {
+  if (url) {
+    const response = await fetch(url, {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${HF_TOKEN}`,
@@ -40,9 +41,19 @@ async function generateWithInput(
           max_new_tokens: maxTokens ?? 100,
         },
       }),
-    }
-  );
-  return (await response.json())[0];
+    });
+    return (await response.json())[0];
+  }
+
+  const hf = getClient();
+  return await hf.textGeneration({
+    model,
+    inputs: `${systemPrompt} ${prompt}`,
+    parameters: {
+      temperature: temperature ?? 0.7,
+      max_new_tokens: maxTokens ?? 100,
+    },
+  });
 }
 
 export async function generateWithHuggingFace(
@@ -51,15 +62,18 @@ export async function generateWithHuggingFace(
   model: string,
   systemPrompt: string,
   temperature: number = 0.7,
-  maxTokens: number = 100
+  maxTokens: number = 100,
+  url?: string
 ): Promise<string> {
   if (type === "completion") {
     try {
       const response: GeneratedTextResponse = await generateWithInput(
+        model,
         prompt,
         systemPrompt,
         temperature,
-        maxTokens
+        maxTokens,
+        url
       );
 
       return String(
