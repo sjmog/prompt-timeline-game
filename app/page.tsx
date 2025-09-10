@@ -55,11 +55,12 @@ export default function Home() {
           className="text-center mb-8"
         >
           <h1 className="text-5xl font-bold text-white mb-2">
-            The Prompt Time Machine ⚡
+            How has AI evolved?
           </h1>
           <p className="text-xl text-purple-200">
-            Watch AI evolve before your eyes
+            Play this game to find out.
           </p>
+          
         </motion.div>
 
         <AnimatePresence mode="wait">

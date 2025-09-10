@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
 import type { GameResults } from "@/types";
+import ProgressTracker from "./ProgressTracker";
 
 interface ResultsShareProps {
   results: GameResults;
@@ -49,10 +50,12 @@ export default function ResultsShare({
       animate={{ opacity: 1, scale: 1 }}
       className="max-w-4xl mx-auto"
     >
+      <ProgressTracker currentStep={3} />
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">
-          🎉 Results
-        </h2>
+        <h2 className="text-3xl font-bold text-white mb-2 text-center">🎉 Your Score</h2>
+        <p className="text-purple-200 mb-6 text-center text-lg">
+          How well did you assess the progress of AI?
+        </p>
 
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <div className="bg-purple-900/50 rounded-lg p-4">

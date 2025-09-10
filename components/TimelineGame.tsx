@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
+import ProgressTracker from "./ProgressTracker";
 import {
   DndContext,
   closestCenter,
@@ -210,18 +211,17 @@ export default function TimelineGame({
       exit={{ opacity: 0 }}
       className="max-w-4xl mx-auto"
     >
+      <ProgressTracker currentStep={2} />
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-white">
-              Step 2: Arrange the Timeline
-            </h2>
+            <h2 className="text-2xl font-bold text-white">Order the Responses</h2>
           </div>
-          <p className="text-purple-200 mb-3">
-            Drag and drop these AI outputs from{" "}
-            <span className="font-semibold">oldest (top)</span> to{" "}
-            <span className="font-semibold">newest (bottom)</span>
+          <p className="text-purple-200 mb-3 leading-relaxed">
+            Here are the four responses we got, but they&apos;re all mixed up! Drag and drop to order them from{" "}
+            <span className="text-orange-400 font-semibold">oldest model (top)</span> to{" "}
+            <span className="text-blue-400 font-semibold">newest model (bottom)</span>.
           </p>
 
           {/* Prompt reminder */}
@@ -231,26 +231,13 @@ export default function TimelineGame({
             </p>
             <p className="text-white font-medium italic">&quot;{prompt}&quot;</p>
           </div>
-
-          {/* Instructions */}
-          <div className="mt-3 flex flex-wrap gap-2 text-xs items-center justify-center">
-            <span className="px-2 py-1 bg-purple-800/50 text-purple-200 rounded-full">
-              💡 Look for coherence and quality
-            </span>
-            <span className="px-2 py-1 bg-purple-800/50 text-purple-200 rounded-full">
-              ⌨️ Tab + Space + Arrows to reorder
-            </span>
-            <span className="px-2 py-1 bg-purple-800/50 text-purple-200 rounded-full">
-              📱 Touch & drag on mobile
-            </span>
-          </div>
         </div>
 
-        <div className="flex items-center justify-center mb-4 px-4">
+        <div className="flex items-center justify-center mb-4 px-4 mt-10">
           <div className="flex items-center gap-2">
             <div className="w-12 h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded" />
             <span className="text-xs text-orange-400 font-semibold">
-              2018 (Oldest)
+              2018 (oldest AI model)
             </span>
           </div>
         </div>
@@ -288,11 +275,11 @@ export default function TimelineGame({
             : null}
         </DndContext>
 
-        <div className="flex items-center justify-center mt-4 px-4">
+        <div className="flex items-center justify-center mt-4 mb-4 px-4">
           <div className="flex items-center gap-2">
             <div className="w-12 h-1 bg-gradient-to-r from-green-500 to-blue-500 rounded" />
             <span className="text-xs text-green-400 font-semibold">
-              2025 (Newest)
+              2025 (newest AI model)
             </span>
           </div>
         </div>
@@ -303,7 +290,7 @@ export default function TimelineGame({
           disabled={hasSubmitted}
           whileHover={{ scale: hasSubmitted ? 1 : 1.02 }}
           whileTap={{ scale: hasSubmitted ? 1 : 0.98 }}
-          className="mt-8 w-full py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-bold rounded-lg hover:from-green-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
+          className="mt-8 w-full cursor-pointer py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-bold rounded-lg hover:from-green-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
         >
           {hasSubmitted ? (
             <span className="flex items-center justify-center">
@@ -330,10 +317,9 @@ export default function TimelineGame({
           )}
         </motion.button>
 
-        {/* Progress indicator */}
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-6 flex justify-center gap-2">
+          <div className="w-2 h-2 bg-purple-700 rounded-full" />
           <div className="w-2 h-2 bg-purple-400 rounded-full" />
-          <div className="w-2 h-2 bg-purple-600 rounded-full" />
           <div className="w-2 h-2 bg-purple-400/30 rounded-full" />
         </div>
       </div>
