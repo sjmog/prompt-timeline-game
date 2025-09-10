@@ -1,10 +1,5 @@
 import { InferenceClient } from "@huggingface/inference";
 
-const HF_TOKEN =
-  process.env.HUGGINGFACE_API_KEY ||
-  process.env.HF_ACCESS_TOKEN ||
-  process.env.HUGGING_FACE_API_KEY;
-
 let client: InferenceClient | null = null;
 
 interface GeneratedTextResponse {
@@ -13,7 +8,7 @@ interface GeneratedTextResponse {
 
 function getClient(): InferenceClient {
   if (!client) {
-    client = new InferenceClient(HF_TOKEN);
+    client = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
   }
   return client;
 }
@@ -30,7 +25,7 @@ async function generateWithInput(
     const response = await fetch(url, {
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${HF_TOKEN}`,
+        Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
         "Content-Type": "application/json",
       },
       method: "POST",

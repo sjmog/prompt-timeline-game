@@ -15,3 +15,18 @@ export interface GameResults {
   prompt: string;
   outputs: ModelOutput[];
 }
+
+export type ModelProvider = "huggingface" | "openrouter";
+export type ModelType = "completion" | "chat";
+
+export interface ModelConfig {
+  year: number;
+  model: string;
+  url?: string;
+  provider: ModelProvider;
+  type: ModelType;
+  modelId: string;
+  systemPrompt: string;
+  temperature?: number;
+  maxTokens?: number;
+}
