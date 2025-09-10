@@ -3,6 +3,7 @@ const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 
 export async function generateWithOpenRouter(
   prompt: string,
+  type: string,
   model: string,
   systemPrompt: string,
   temperature: number = 0.7,
