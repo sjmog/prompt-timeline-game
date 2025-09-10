@@ -1,13 +1,12 @@
 import { InferenceClient } from '@huggingface/inference';
 
 const HF_TOKEN = process.env.HUGGINGFACE_API_KEY || process.env.HF_ACCESS_TOKEN || process.env.HUGGING_FACE_API_KEY;
-const HF_ENDPOINT_URL = process.env.HUGGINGFACE_ENDPOINT_URL;
 
 let client: InferenceClient | null = null;
 
 function getClient(): InferenceClient {
   if (!client) {
-    client = new InferenceClient(HF_TOKEN, HF_ENDPOINT_URL ? { endpointUrl: HF_ENDPOINT_URL } : undefined);
+    client = new InferenceClient(HF_TOKEN);
   }
   return client;
 }
