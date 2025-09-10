@@ -1,4 +1,8 @@
 import { InferenceClient } from "@huggingface/inference";
+import type {
+  ChatCompletionInput,
+  ChatCompletionOutput,
+} from "@huggingface/tasks";
 
 let client: InferenceClient | null = null;
 
@@ -85,7 +89,7 @@ export async function generateWithHuggingFace(
   try {
     const hf = getClient();
 
-    const response = await hf.chatCompletion({
+    const response: ChatCompletionOutput = await hf.chatCompletion({
       model,
       messages: [
         { role: "system", content: systemPrompt },
@@ -93,17 +97,12 @@ export async function generateWithHuggingFace(
       ],
       temperature,
       max_tokens: maxTokens,
-    } as any);
+    } as ChatCompletionInput);
 
-    // Some providers return string content, others return array of parts; normalize
-    const content = response?.choices?.[0]?.message?.content as any;
+    const content: string | undefined =
+      response?.choices?.[0]?.message?.content;
     if (!content) return "";
     if (typeof content === "string") return content;
-    if (Array.isArray(content)) {
-      return content
-        .map((c: any) => (typeof c === "string" ? c : c?.text || ""))
-        .join("");
-    }
     return String(content);
   } catch (error) {
     console.error("HuggingFace Inference error:", error);

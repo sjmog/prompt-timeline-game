@@ -25,7 +25,7 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
     }
   };
 
-  const useExample = (example: string) => {
+  const applyExample = (example: string) => {
     setPrompt(example);
   };
 
@@ -41,7 +41,7 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
           Step 1: Write Your Prompt
         </h2>
         <p className="text-purple-200 mb-6">
-          Create a prompt that will test AI's creative abilities across different years
+          Create a prompt that will test AI&apos;s creative abilities across different years
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -60,7 +60,7 @@ export default function PromptInput({ onSubmit, loading }: PromptInputProps) {
                 <button
                   key={index}
                   type="button"
-                  onClick={() => useExample(example)}
+                  onClick={() => applyExample(example)}
                   className="cursor-pointer px-3 py-1 text-xs bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors truncate"
                   disabled={loading}
                 >

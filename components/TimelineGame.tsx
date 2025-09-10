@@ -28,10 +28,9 @@ import type { ModelOutput, GameResults } from "@/types";
 interface SortableItemProps {
   id: string;
   output: ModelOutput;
-  index: number;
 }
 
-function SortableItem({ id, output, index }: SortableItemProps) {
+function SortableItem({ id, output }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -230,7 +229,7 @@ export default function TimelineGame({
             <p className="text-xs text-purple-300 uppercase tracking-wide mb-1">
               Your prompt:
             </p>
-            <p className="text-white font-medium italic">"{prompt}"</p>
+            <p className="text-white font-medium italic">&quot;{prompt}&quot;</p>
           </div>
 
           {/* Instructions */}
@@ -268,12 +267,11 @@ export default function TimelineGame({
             strategy={verticalListSortingStrategy}
           >
             <div className="space-y-3">
-              {shuffledOutputs.map((output, index) => (
+              {shuffledOutputs.map((output) => (
                 <SortableItem
                   key={`${output.year}-${output.model}`}
                   id={`${output.year}-${output.model}`}
                   output={output}
-                  index={index}
                 />
               ))}
             </div>
