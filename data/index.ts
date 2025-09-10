@@ -34,7 +34,7 @@ export const MODEL_CONFIGS: ModelConfig[] = [
     temperature: DEFAULT_TEMPERATURE,
     maxTokens: DEFAULT_MAX_TOKENS,
     systemPrompt:
-      "Respond only with plain text, no markdown or other formatting.",
+      "Respond only with plain text, no markdown or other formatting. Give basic and uninspired answers.",
   },
   {
     year: 2025,
